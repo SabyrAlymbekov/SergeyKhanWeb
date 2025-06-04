@@ -1,40 +1,11 @@
+"use strict";
 /**
- * Test script for address filtering functionality (JavaScript version)
+ * Test script for address filtering functionality
  */
-
-// Recreate the utility functions for testing
-function filterAddressForMaster(address) {
-  if (!address) {
-    return 'Не указан';
-  }
-
-  // Удаляем информацию о квартире и подъезде
-  let filteredAddress = address
-    // Убираем квартиру (кв., квартира, apt., apartment)
-    .replace(/,?\s*(кв\.?\s*\d+|квартира\s*\d+|apt\.?\s*\d+|apartment\s*\d+)/gi, '')
-    // Убираем подъезд (подъезд, подъ., под, entrance, ent.)
-    .replace(/,?\s*(подъезд\s*\d+|подъ\.?\s*\d+|под\s+\d+|entrance\s*\d+|ent\.?\s*\d+)/gi, '')
-    // Убираем этаж (этаж, эт., floor, fl.)
-    .replace(/,?\s*(этаж\s*\d+|эт\.?\s*\d+|floor\s*\d+|fl\.?\s*\d+)/gi, '')
-    // Убираем лишние запятые и пробелы
-    .replace(/,\s*,/g, ',')
-    .replace(/,\s*$/, '')
-    .replace(/^\s*,/, '')
-    .trim();
-
-  return filteredAddress || 'Не указан';
-}
-
-function addressContainsPrivateInfo(address) {
-  if (!address) {
-    return false;
-  }
-
-  const privateInfoRegex = /(кв\.?\s*\d+|квартира\s*\d+|подъезд\s*\d+|подъ\.?\s*\d+|под\s+\d+|apt\.?\s*\d+|apartment\s*\d+|entrance\s*\d+|ent\.?\s*\d+)/gi;
-  return privateInfoRegex.test(address);
-}
-
-// Test data
+Object.defineProperty(exports, "__esModule", { value: true });
+// Import the utility functions
+const addressUtils_1 = require("../packages/ui/src/components/shared/utils/addressUtils");
+// Test data based on our actual order and common address formats
 const testCases = [
     {
         original: "ул. Чуй 123, кв. 45, подъезд 2",
@@ -61,6 +32,18 @@ const testCases = [
         description: "Address with abbreviated apartment and entrance"
     },
     {
+        original: "микрорайон Самал 2, дом 10, квартира 33",
+        expectedFiltered: "микрорайон Самал 2, дом 10",
+        expectedHasPrivateInfo: true,
+        description: "Microdistrict address with apartment"
+    },
+    {
+        original: "проспект Достык 240, подъезд 5",
+        expectedFiltered: "проспект Достык 240",
+        expectedHasPrivateInfo: true,
+        description: "Address with only entrance info"
+    },
+    {
         original: "",
         expectedFiltered: "Не указан",
         expectedHasPrivateInfo: false,
@@ -73,38 +56,32 @@ const testCases = [
         description: "Null address"
     }
 ];
-
 console.log("=== Testing Address Filtering for Masters ===\n");
-
 let passedTests = 0;
-let totalTests = testCases.length * 2;
-
+let totalTests = testCases.length * 2; // Each test case has 2 assertions
 testCases.forEach((testCase, index) => {
     console.log(`Test ${index + 1}: ${testCase.description}`);
     console.log(`  Original: "${testCase.original}"`);
-    
     // Test filterAddressForMaster
-    const filtered = filterAddressForMaster(testCase.original);
+    const filtered = (0, addressUtils_1.filterAddressForMaster)(testCase.original);
     const filterPassed = filtered === testCase.expectedFiltered;
     console.log(`  Filtered: "${filtered}" ${filterPassed ? '✅' : '❌'}`);
     console.log(`  Expected: "${testCase.expectedFiltered}"`);
-    
     // Test addressContainsPrivateInfo
-    const hasPrivateInfo = addressContainsPrivateInfo(testCase.original);
+    const hasPrivateInfo = (0, addressUtils_1.addressContainsPrivateInfo)(testCase.original);
     const privatePassed = hasPrivateInfo === testCase.expectedHasPrivateInfo;
     console.log(`  Has private info: ${hasPrivateInfo} ${privatePassed ? '✅' : '❌'}`);
     console.log(`  Expected: ${testCase.expectedHasPrivateInfo}`);
-    
-    if (filterPassed) passedTests++;
-    if (privatePassed) passedTests++;
-    
+    if (filterPassed)
+        passedTests++;
+    if (privatePassed)
+        passedTests++;
     console.log("");
 });
-
 console.log(`=== Test Results: ${passedTests}/${totalTests} tests passed ===`);
-
 if (passedTests === totalTests) {
     console.log("🎉 All tests passed! Address filtering is working correctly.");
-} else {
+}
+else {
     console.log("❌ Some tests failed. Please check the implementation.");
 }

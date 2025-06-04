@@ -1,0 +1,1 @@
+{"version":3,"file":"CompanyBalanceManager.d.ts","sourceRoot":"","sources":["CompanyBalanceManager.tsx"],"names":[],"mappings":"AAEA,OAAO,KAA8B,MAAM,OAAO,CAAC;AAuCnD,UAAU,0BAA0B;IAClC,MAAM,EAAE,MAAM,CAAC;IACf,YAAY,CAAC,EAAE,OAAO,CAAC;IACvB,QAAQ,CAAC,EAAE,OAAO,CAAC;CACpB;AAED,eAAO,MAAM,qBAAqB,EAAE,KAAK,CAAC,EAAE,CAAC,0BAA0B,CAuQtE,CAAC"}

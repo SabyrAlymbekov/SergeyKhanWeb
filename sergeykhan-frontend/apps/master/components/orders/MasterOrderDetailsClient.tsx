@@ -16,6 +16,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { Badge } from "@workspace/ui/components/badge";
 import { ArrowLeft, User, Phone, MapPin, FileText, DollarSign, Calendar } from "lucide-react";
+import CompleteOrderDialog from "./CompleteOrderDialog";
 
 interface Props {
   id: string;
@@ -42,6 +43,13 @@ export default function MasterOrderDetailsClient({ id }: Props) {
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [takingOrder, setTakingOrder] = useState(false);
+  
+  const handleOrderCompleted = (completedOrder: Order) => {
+    setOrder(completedOrder);
+    // Оповещаем пользователя об успешном завершении заказа
+    alert("Заказ успешно завершен!");
+    // Обновляем страницу или выполняем другие действия при необходимости
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -265,22 +273,32 @@ export default function MasterOrderDetailsClient({ id }: Props) {
           <h1 className="text-3xl font-bold tracking-tight">
             Заказ #{order.id}
           </h1>
+          <Badge 
+            variant={
+              order.status === 'новый' ? 'default' : 
+              order.status === 'в обработке' ? 'secondary' : 
+              order.status === 'назначен' ? 'outline' :
+              order.status === 'завершен' ? 'default' :
+              order.status === 'проверяется' ? 'secondary' :
+              'destructive'
+            }
+            className={`text-sm ${
+              order.status === 'новый' ? 'bg-blue-600 hover:bg-blue-700' : 
+              order.status === 'в обработке' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 
+              order.status === 'назначен' ? 'bg-green-600 hover:bg-green-700 text-white' :
+              order.status === 'завершен' ? 'bg-green-800 hover:bg-green-900 text-white' : 
+              order.status === 'проверяется' ? 'bg-yellow-800 hover:bg-yellow-900 text-white' : 
+              'text-muted-foreground'
+            }`}
+          >
+            {order.status}
+          </Badge>
         </div>
-        <Badge 
-          variant={
-            order.status === 'новый' ? 'default' : 
-            order.status === 'в обработке' ? 'secondary' : 
-            order.status === 'назначен' ? 'outline' :
-            'destructive'
-          }
-          className={`text-sm ${
-            order.status === 'новый' ? 'bg-blue-600 hover:bg-blue-700' : 
-            order.status === 'в обработке' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 
-            order.status === 'назначен' ? 'bg-green-600 hover:bg-green-700 text-white' :
-            'text-muted-foreground'
-          }`}
-        >
-          {order.status}
+        
+        {/* Добавляем диалог завершения заказа, если статус позволяет */}
+        {order.status === 'назначен' && (
+          <CompleteOrderDialog order={order} onOrderCompleted={handleOrderCompleted} />
+        )}
         </Badge>
       </div>
 

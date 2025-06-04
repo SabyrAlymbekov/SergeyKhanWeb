@@ -30,12 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from "@workspace/ui/components/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@workspace/ui/components/dialog";
-import { Textarea } from "@workspace/ui/components/textarea";
-import { Separator } from "@workspace/ui/components/separator";
-import { DatePicker } from "@/components/orders-taken/DatePicker";
-import { TimePickerComponent } from "@/components/orders-taken/TimePicker";
 import { Order } from "@workspace/ui/components/shared/constants/orders";
+import CompleteOrderDialog from "../orders/CompleteOrderDialog";
 
 export function OrdersTakenDataTable({ data, columns }: { data: Order[]; columns: ColumnDef<Order>[] }) {
   const router = useRouter();
@@ -43,27 +39,13 @@ export function OrdersTakenDataTable({ data, columns }: { data: Order[]; columns
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState<string>("");
   const [orders, setOrders] = React.useState<Order[]>(data);
-  const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
-  const [expenses, setExpenses] = React.useState("");
-  const [totalReceived, setTotalReceived] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [image, setImage] = React.useState<File | null>(null);
-  const [arrivalDate, setArrivalDate] = React.useState<Date | undefined>(undefined);
-  const [arrivalTime, setArrivalTime] = React.useState<string>("");
 
-  const revenue: number = 100000;
-  const expenses_order: number = 100;
-  const clearRevenue: number = revenue - expenses_order;
-
-  const handleSubmit = () => {
-    if (selectedOrder) {
-      setOrders((prev) =>
-          prev.map((order) =>
-              order.id === selectedOrder.id ? { ...order, status: "Ожидание" } : order
-          )
-      );
-      setSelectedOrder(null);
-    }
+  const handleOrderCompleted = (completedOrder: Order) => {
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === completedOrder.id ? completedOrder : order
+      )
+    );
   };
 
   const table = useReactTable({
@@ -148,16 +130,11 @@ export function OrdersTakenDataTable({ data, columns }: { data: Order[]; columns
                       <Clock className="w-4 h-4 mr-2" /> Ожидание
                     </span>
                       ) : (
-                          // Кнопка для открытия диалоговой формы;
-                          // stopPropagation предотвращает срабатывание клика по строке
-                          <Button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedOrder(row.original);
-                              }}
-                          >
-                            Завершить
-                          </Button>
+                          // Complete Order Dialog for warranty masters
+                          <CompleteOrderDialog 
+                            order={row.original} 
+                            onOrderCompleted={handleOrderCompleted}
+                          />
                       )}
                     </TableCell>
                   </TableRow>
@@ -184,49 +161,6 @@ export function OrdersTakenDataTable({ data, columns }: { data: Order[]; columns
             Следующий
           </Button>
         </div>
-
-        {selectedOrder && (
-            <Dialog open={!!selectedOrder} onOpenChange={() => setSelectedOrder(null)}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Заполните форму завершения заказа</DialogTitle>
-                </DialogHeader>
-                <h2>Шаг 1</h2>
-                <Input type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} />
-                <Textarea
-                    placeholder="Описание проделанной работы"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-                <Input
-                    placeholder="Расходы (детали, транспорт)"
-                    value={expenses}
-                    onChange={(e) => setExpenses(e.target.value)}
-                />
-                <Input
-                    placeholder="Сумма полученная за заказ"
-                    value={totalReceived}
-                    onChange={(e) => setTotalReceived(e.target.value)}
-                />
-                <Separator />
-                <h2>Шаг 2</h2>
-                <div className="flex justify-between flex-row-reverse">
-                  <TimePickerComponent value={arrivalTime} onChangeAction={setArrivalTime} />
-                  <DatePicker
-                      selectedDate={arrivalDate}
-                      onDateChangeAction={setArrivalDate} // исправлено название пропса
-                  />
-                </div>
-                <h3>Итого</h3>
-                <p className="ml-5">
-                  • Выручка составляет — <b>{clearRevenue} тенге</b>
-                </p>
-                <DialogFooter>
-                  <Button onClick={handleSubmit}>Отправить</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-        )}
       </div>
   );
 }

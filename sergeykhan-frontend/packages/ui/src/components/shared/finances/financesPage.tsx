@@ -23,7 +23,7 @@ const FinancesPage = () => {
       <div className="space-y-8">
         {/* Заголовок */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Мои финансы</h1>
+          <h1 className="text-3xl font-bold mb-2">Мои финансы</h1>
           <p className="text-gray-600">Просмотр баланса и истории операций</p>
         </div>
 

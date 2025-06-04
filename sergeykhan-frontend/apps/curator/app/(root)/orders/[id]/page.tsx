@@ -3,15 +3,15 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import OrderDetailsClient from "@shared/orders/order-page/OrderDetailsClient";
+import CuratorOrderDetailsClient from "@/components/orders/CuratorOrderDetailsClient";
 
 export default function Page() {
   const params = useParams();
-  const id = params?.id;
+  const id = params?.id as string;
 
   if (!id) {
-    return <div className="p-4 text-center">ID заказа не указан</div>;
+    return <div className="p-4 text-center text-red-500">Неверный ID заказа</div>;
   }
 
-  return <OrderDetailsClient id={id.toString()} />;
+  return <CuratorOrderDetailsClient id={id} />;
 }

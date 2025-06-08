@@ -14,14 +14,8 @@ export const sidebar_items = [
     {
         name: "Инструменты",
         list: [
-
           {
-                title: "Перезавершить заказы",
-                url: "/orders",
-                icon: ClipboardList,
-            },
-          {
-                title: "Взятые заказы",
+                title: "Перевзятые заказы",
                 url: "/orders-taken",
                 icon: ClipboardList,
             },
@@ -31,14 +25,19 @@ export const sidebar_items = [
                 icon: CalendarDays,
             },
             {
-                title: "Финансы",
-                url: "/finance",
-                icon: ChartColumn,
-            },
-            {
                 title: "Звонки",
                 url: "/call",
                 icon: Phone,
+            }
+        ]
+    },
+    {
+        name: "Финансы",
+        list: [
+            {
+                title: "Финансы",
+                url: "/finance",
+                icon: ChartColumn,
             }
         ]
     },

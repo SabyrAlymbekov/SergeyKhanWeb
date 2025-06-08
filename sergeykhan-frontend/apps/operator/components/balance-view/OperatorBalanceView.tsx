@@ -51,7 +51,7 @@ const OperatorBalanceView: React.FC<OperatorBalanceViewProps> = ({ userId }) => 
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-center text-gray-500">Загрузка...</div>
+                    <div className="text-center text-muted-foreground">Загрузка...</div>
                 </CardContent>
             </Card>
         );
@@ -67,7 +67,7 @@ const OperatorBalanceView: React.FC<OperatorBalanceViewProps> = ({ userId }) => 
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="text-center text-red-500">Не удалось загрузить данные о балансе</div>
+                    <div className="text-center text-red-600 dark:text-red-400">Не удалось загрузить данные о балансе</div>
                 </CardContent>
             </Card>
         );
@@ -82,7 +82,7 @@ const OperatorBalanceView: React.FC<OperatorBalanceViewProps> = ({ userId }) => 
                     <Wallet className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                         {balance.current_balance.toLocaleString()} ₸
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -98,7 +98,7 @@ const OperatorBalanceView: React.FC<OperatorBalanceViewProps> = ({ userId }) => 
                     <PiggyBank className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                         {balance.paid_amount.toLocaleString()} ₸
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -114,7 +114,7 @@ const OperatorBalanceView: React.FC<OperatorBalanceViewProps> = ({ userId }) => 
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold text-orange-600">
+                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
                         {Math.max(0, balance.current_balance - balance.paid_amount).toLocaleString()} ₸
                     </div>
                     <p className="text-xs text-muted-foreground">

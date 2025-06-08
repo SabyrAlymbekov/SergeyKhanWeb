@@ -230,13 +230,13 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                 <div className="space-y-1 text-sm">
                                     <div className="flex justify-between">
                                         <span>Текущий:</span>
-                                        <span className="font-medium text-green-600">
+                                        <span className="font-medium text-green-600 dark:text-green-400">
                                             {formatCurrency(userBalance.current_balance)}
                                         </span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Выплачено:</span>
-                                        <span className="font-medium text-blue-600">
+                                        <span className="font-medium text-blue-600 dark:text-blue-400">
                                             {formatCurrency(userBalance.paid_amount)}
                                         </span>
                                     </div>
@@ -272,13 +272,13 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                             <div className="grid grid-cols-2 gap-4 text-sm">
                                                 <div>
                                                     <span className="text-muted-foreground">Текущий баланс:</span>
-                                                    <div className="font-medium text-green-600">
+                                                    <div className="font-medium text-green-600 dark:text-green-400">
                                                         {formatCurrency(userBalance.current_balance)}
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <span className="text-muted-foreground">Выплачено:</span>
-                                                    <div className="font-medium text-blue-600">
+                                                    <div className="font-medium text-blue-600 dark:text-blue-400">
                                                         {formatCurrency(userBalance.paid_amount)}
                                                     </div>
                                                 </div>
@@ -308,7 +308,7 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                 <Wallet className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-green-600">
+                                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                                     {formatCurrency(balance.current_balance)}
                                 </div>
                                 <p className="text-xs text-muted-foreground">
@@ -323,7 +323,7 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                 <PiggyBank className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-blue-600">
+                                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                                     {formatCurrency(balance.paid_amount)}
                                 </div>
                                 <p className="text-xs text-muted-foreground">
@@ -338,7 +338,7 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                 <History className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-purple-600">
+                                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                                     {formatCurrency(balance.total_earned)}
                                 </div>
                                 <p className="text-xs text-muted-foreground">
@@ -384,13 +384,13 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                             <SelectContent>
                                                 <SelectItem value="top_up">
                                                     <div className="flex items-center gap-2">
-                                                        <Plus className="h-4 w-4 text-green-600" />
+                                                        <Plus className="h-4 w-4 text-green-600 dark:text-green-400" />
                                                         Пополнить
                                                     </div>
                                                 </SelectItem>
                                                 <SelectItem value="deduct">
                                                     <div className="flex items-center gap-2">
-                                                        <Minus className="h-4 w-4 text-red-600" />
+                                                        <Minus className="h-4 w-4 text-red-600 dark:text-red-400" />
                                                         Списать
                                                     </div>
                                                 </SelectItem>
@@ -479,7 +479,7 @@ const SuperAdminBalanceManager: React.FC<SuperAdminBalanceManagerProps> = ({ use
                                                     <div className="grid grid-cols-2 gap-4 text-sm">
                                                         <div>
                                                             <span className="font-medium">Сумма: </span>
-                                                            <span className={log.action_type === 'top_up' ? 'text-green-600' : 'text-red-600'}>
+                                                            <span className={log.action_type === 'top_up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
                                                                 {log.action_type === 'top_up' ? '+' : '-'}{parseFloat(log.amount).toLocaleString('ru-RU')} ₸
                                                             </span>
                                                         </div>

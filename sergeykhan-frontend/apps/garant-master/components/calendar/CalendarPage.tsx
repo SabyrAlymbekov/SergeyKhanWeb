@@ -18,7 +18,7 @@ const CalendarPage = () => {
         <div className="rounded-xl border p-6">
           <MasterCalendar 
             masterId={userId ? parseInt(userId) : undefined}
-            userRole="garant_master" 
+            userRole="master" 
             readOnly={false}
             showCreateButton={true}
             apiBaseUrl={API}

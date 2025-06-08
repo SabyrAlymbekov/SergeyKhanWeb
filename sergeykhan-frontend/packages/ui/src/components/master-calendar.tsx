@@ -65,7 +65,7 @@ export function MasterCalendar({
         const token = localStorage.getItem('token');
         
         // Если передан masterId, получаем события конкретного мастера, иначе свои события
-        const endpoint = masterId ? `/master/${masterId}/events/` : '/mine/';
+        const endpoint = masterId ? `/master/${masterId}/events/` : '/mine';
         console.log('Fetching events from endpoint:', endpoint);
         console.log('API base URL:', apiBaseUrl);
         console.log('Master ID:', masterId);

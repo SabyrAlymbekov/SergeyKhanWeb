@@ -63,15 +63,15 @@ export const FinancesSuperAdmin = () => {
     <div className="w-full container mx-auto px-4 py-8">
       <div className="space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Финансы компании</h1>
-          <p className="text-gray-600">Просмотр и управление балансом компании</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Финансы компании</h1>
+          <p className="text-muted-foreground">Просмотр и управление балансом компании</p>
           {error && (
-            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-800">
+            <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm text-yellow-800 dark:text-yellow-300">
               Примечание: Произошла ошибка при загрузке данных. Отображается интерфейс баланса компании.
             </div>
           )}
         </div>
-        <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="bg-card rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold mb-4">Баланс компании</h2>
           <CompanyBalanceManager userId={userId} showControls={true} />
         </div>

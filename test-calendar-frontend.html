@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест календаря garant-master</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .credentials {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        pre {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Тест исправленного календаря garant-master</h1>
+        
+        <div class="credentials">
+            <h3>📋 Тестовые данные для входа:</h3>
+            <strong>Email:</strong> garant_master@example.com<br>
+            <strong>Пароль:</strong> garant123<br>
+            <strong>Роль:</strong> warrant-master
+        </div>
+
+        <div class="test-section">
+            <h3>🔑 1. Тест авторизации</h3>
+            <button onclick="testAuth()">Проверить авторизацию</button>
+            <div id="auth-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📅 2. Тест получения календарных событий</h3>
+            <button onclick="testGetEvents()">Получить события календаря</button>
+            <div id="events-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>➕ 3. Тест создания события</h3>
+            <button onclick="testCreateEvent()">Создать тестовое событие</button>
+            <div id="create-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 4. Быстрые ссылки</h3>
+            <button onclick="openCalendar()">Открыть календарь</button>
+            <button onclick="openLogin()">Открыть страницу входа</button>
+            <button onclick="testAllEndpoints()">Тест всех endpoints</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Результаты тестирования:</h3>
+            <div id="test-summary"></div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://127.0.0.1:8000';
+        const FRONTEND_URL = 'http://localhost:3000';
+        
+        let authToken = null;
+        let testResults = [];
+
+        function addResult(test, success, message, details = null) {
+            const resultDiv = document.getElementById(test + '-result');
+            const className = success ? 'success' : 'error';
+            let html = `<div class="test-result ${className}">
+                ${success ? '✅' : '❌'} ${message}
+            </div>`;
+            
+            if (details) {
+                html += `<pre>${JSON.stringify(details, null, 2)}</pre>`;
+            }
+            
+            resultDiv.innerHTML = html;
+            
+            testResults.push({
+                test,
+                success,
+                message,
+                details
+            });
+            
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summaryDiv = document.getElementById('test-summary');
+            const passed = testResults.filter(r => r.success).length;
+            const total = testResults.length;
+            
+            summaryDiv.innerHTML = `
+                <div class="test-result info">
+                    📈 Пройдено тестов: ${passed}/${total}
+                    ${passed === total ? ' 🎉 Все тесты прошли успешно!' : ''}
+                </div>
+            `;
+        }
+
+        async function testAuth() {
+            try {
+                const response = await fetch(`${BASE_URL}/login/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'garant_master@example.com',
+                        password: 'garant123'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    authToken = data.token;
+                    addResult('auth', true, 'Авторизация успешна', {
+                        token: data.token.substring(0, 20) + '...',
+                        user: data.user
+                    });
+                } else {
+                    const errorData = await response.json();
+                    addResult('auth', false, `Ошибка авторизации: ${response.status}`, errorData);
+                }
+            } catch (error) {
+                addResult('auth', false, `Ошибка соединения: ${error.message}`);
+            }
+        }
+
+        async function testGetEvents() {
+            if (!authToken) {
+                addResult('events', false, 'Сначала необходимо авторизоваться');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BASE_URL}/mine`, {
+                    headers: {
+                        'Authorization': `Token ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const events = await response.json();
+                    addResult('events', true, `Получено событий: ${events.length}`, events);
+                } else {
+                    const errorData = await response.json();
+                    addResult('events', false, `Ошибка получения событий: ${response.status}`, errorData);
+                }
+            } catch (error) {
+                addResult('events', false, `Ошибка соединения: ${error.message}`);
+            }
+        }
+
+        async function testCreateEvent() {
+            if (!authToken) {
+                addResult('create', false, 'Сначала необходимо авторизоваться');
+                return;
+            }
+
+            const testEvent = {
+                title: 'Тестовое событие из браузера',
+                start: new Date().toISOString(),
+                end: new Date(Date.now() + 3600000).toISOString(), // +1 час
+                allDay: false
+            };
+
+            try {
+                const response = await fetch(`${BASE_URL}/create/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${authToken}`
+                    },
+                    body: JSON.stringify(testEvent)
+                });
+
+                if (response.ok) {
+                    const createdEvent = await response.json();
+                    addResult('create', true, 'Событие создано успешно', createdEvent);
+                } else {
+                    const errorData = await response.json();
+                    addResult('create', false, `Ошибка создания события: ${response.status}`, errorData);
+                }
+            } catch (error) {
+                addResult('create', false, `Ошибка соединения: ${error.message}`);
+            }
+        }
+
+        async function testAllEndpoints() {
+            addResult('test-summary', true, 'Запуск полного тестирования...');
+            
+            await testAuth();
+            await new Promise(resolve => setTimeout(resolve, 500)); // небольшая задержка
+            
+            await testGetEvents();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testCreateEvent();
+        }
+
+        function openCalendar() {
+            window.open(`${FRONTEND_URL}/calendar`, '_blank');
+        }
+
+        function openLogin() {
+            window.open(`${FRONTEND_URL}/login`, '_blank');
+        }
+
+        // Автоматический тест при загрузке страницы
+        window.addEventListener('load', function() {
+            addResult('test-summary', true, 'Страница тестирования загружена. Используйте кнопки для запуска тестов.');
+        });
+    </script>
+</body>
+</html>
